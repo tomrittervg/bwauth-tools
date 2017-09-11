@@ -28,6 +28,15 @@ bwauths = {
 		'type' : 'vote',
 		'dl_location' : 'data/longclaw',
 		'url' : 'https://collector.torproject.org/recent/relay-descriptors/votes/',
+		'fingerprint' : '23D15D965BC35114467363C165C4F724B64B4F66',
+		'file_minute' : '00',
+		'tz' : 'UTC',
+		'give_up_after' : 5
+		},
+	'faravahar' : {
+		'type' : 'vote',
+		'dl_location' : 'data/faravahar',
+		'url' : 'https://collector.torproject.org/recent/relay-descriptors/votes/',
 		'fingerprint' : 'EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97',
 		'file_minute' : '00',
 		'tz' : 'UTC',
