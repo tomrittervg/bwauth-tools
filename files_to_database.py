@@ -5,9 +5,12 @@ import sys
 import json
 import pytz
 import base64
+import MySQLdb
 import requests
 import binascii
 from datetime import datetime, timedelta, time
+
+from database_creds import *
 
 TYPE_BWAUTH_VOTE = 1
 TYPE_DIRAUTH_VOTE = 2
@@ -20,7 +23,8 @@ def to_unixtime(dt):
 
 class bwauth_relay_data:
 	line_type = None
-	bwauth = None
+	bwauth_id = None
+	bwauth_name = None
 	timestamp = None
 	fingerprint = None
 	bw = None
@@ -48,13 +52,14 @@ class bwauth_relay_data:
 		self.line_type = TYPE_DIRAUTH_VOTE
 		self.fingerprint = data['fingerprint']
 		self.fingerprint_print = binascii.hexlify(data['fingerprint'])
-		self.bw = data['bw']
+		self.bw = int(data['bw'])
 		if 'measured' in data:
-			self.measured_bw = data['measured']
+			self.measured_bw = int(data['measured'])
 
 	def __init__(self, line_type, bwauth, timestamp, data):
-		self.bwauth = bwauth
-		self.timestamp = to_unixtime(timestamp)
+		self.bwauth_name = bwauth[0]
+		self.bwauth_id = int(bwauth[1])
+		self.timestamp = int(to_unixtime(timestamp))
 		if line_type == TYPE_BWAUTH_VOTE:
 			self._parse_bwauth_vote(data)
 		elif line_type == TYPE_DIRAUTH_VOTE:
@@ -70,8 +75,25 @@ class bwauth_relay_data:
 		else:
 			raise Exception("Do not know how to parse this line type") 
 		return 0 == len(filter(lambda a : a is None, fields))
+	def save(self):
+		global db
+		c = db.cursor()
+
+		if self.line_type == TYPE_BWAUTH_VOTE:
+			cols = "timestamp, fingerprint, bwauth, bw, measured_at, updated_at, scanner"
+			vals = "%s, _binary %s, %s, %s, %s, %s, %s"
+			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.measured_at, self.updated_at, self.scanner)
+		elif self.line_type == TYPE_DIRAUTH_VOTE:
+			cols = "timestamp, fingerprint, bwauth, bw, measured_bw"
+			vals = "%s, _binary %s, %s, %s, %s"
+			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.measured_bw)
+		else:
+			raise Exception("Error saving unknown type") 
+
+		c.execute("INSERT INTO relays("+cols+") VALUES("+vals+")", data)
+
 	def __str__(self):
-		s = self.bwauth + "(" + str(self.timestamp) + ") " + self.fingerprint_print + " : " + str(self.bw)
+		s = self.bwauth_name + "(" + str(self.bwauth_id) + " " + str(self.timestamp) + ") " + self.fingerprint_print + " : " + str(self.bw)
 		if self.line_type == TYPE_BWAUTH_VOTE:
 			s += "  m:" + str(self.measured_at) + ", u:" + str(self.updated_at) + ", scanner:" + str(self.scanner)
 		elif self.line_type == TYPE_DIRAUTH_VOTE:
@@ -79,10 +101,20 @@ class bwauth_relay_data:
 		return s
 
 ##########################################
-
+bwauths = None
 def bwauth_from_filename(filename):
+	global db, bwauths
+	if not bwauths:
+		bwauths = {}
+		c = db.cursor()
+		c.execute("SELECT * FROM bwauths")
+		for row in c:
+			bwauths[row[1]] = row[0]
+
 	b = filename.split("/")[1]
-	return b
+	if b not in bwauths:
+		raise Exception("The bwauth " + b + " is not present in the bwauth table")
+	return b, bwauths[b]
 
 def find_files(location):
 	filenames = []
@@ -92,7 +124,6 @@ def find_files(location):
 	return filenames
 
 def parse_file_raw_bwauth_vote(filename):
-	print "Parsing", filename
 	f = open(filename)
 
 	bwauth = bwauth_from_filename(filename)
@@ -107,10 +138,9 @@ def parse_file_raw_bwauth_vote(filename):
 		line = bwauth_relay_data(TYPE_BWAUTH_VOTE, bwauth, timestamp, l)
 		if not line.valid():
 			raise Exception("bwauth vote line was invalid: " + l)
-		print line
+		line.save()
 
 def parse_file_dirauth_vote(filename):
-	print "Parsing", filename
 	f = open(filename)
 	
 	# State Machine
@@ -149,16 +179,28 @@ def parse_file_dirauth_vote(filename):
 			line = bwauth_relay_data(TYPE_DIRAUTH_VOTE, bwauth, timestamp, data)
 			if not line.valid():
 				raise Exception("dirauth relay was invalid: " + data['nickname'])
-			print line
+			line.save()
 			mode = MODE_RELAY
 
+# See if we already processed this file
 def should_parse_file(filename):
-	# See if we already processed this file
+	global db
+	c = db.cursor()
+	c.execute("SELECT * FROM files WHERE name = %s", (filename,))
+	if c.fetchone():
+		return False
 	return True
+def record_file(filename):
+	global db
+	c = db.cursor()
+	c.execute("INSERT INTO files(name) VALUES(%s)", (filename,))
+	db.commit()
 
 def parse_file(filename):
 	if not should_parse_file(filename):
+		print "Already processed", filename
 		return
+	print "Processing ", filename
 
 	if 'bwscan.' in filename:
 		parse_file_raw_bwauth_vote(filename)
@@ -166,12 +208,17 @@ def parse_file(filename):
 		parse_file_dirauth_vote(filename)
 	else:
 		pass
+	record_file(filename)
 
+
+db = None
 if __name__ == "__main__":
 	for ts in [3600, 2030400, 16513200]:
 		c = to_unixtime(from_unixtime(ts))
 		if c != ts:
 			raise Exception("Timetsamp conversion is wrong: " + str(ts) + " " + str(c))
+
+	db = MySQLdb.connect(host=database_host, user=database_user, passwd=database_pass, db=database_name)
 
 	filenames = find_files('data')
 	for f in filenames:

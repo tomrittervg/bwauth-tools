@@ -1,1 +1,3 @@
 data/
+database_creds.py
+*.pyc
