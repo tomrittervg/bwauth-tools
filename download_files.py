@@ -24,6 +24,14 @@ bwauths = {
 		'tz' : 'Canada/Central',
 		'give_up_after' : 10
 		},
+	'maatuska2-vanilla' : {
+		'type' : 'archived',
+		'dl_location' : 'data/maatuska-vanilla',
+		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'file_minute' : '45',
+		'tz' : 'Canada/Central',
+		'give_up_after' : 10
+		},
 	'longclaw' : {
 		'type' : 'vote',
 		'dl_location' : 'data/longclaw',
