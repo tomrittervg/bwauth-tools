@@ -202,12 +202,12 @@ def parse_file(filename):
 		return
 	print "Processing ", filename
 
-	if 'bwscan.' in filename:
+	if 'moria' in filename or 'bwscan.' in filename:
 		parse_file_raw_bwauth_vote(filename)
 	elif '-vote-' in filename:
 		parse_file_dirauth_vote(filename)
 	else:
-		pass
+		raise Exception("Don't know how to parse " + filename)
 	record_file(filename)
 
 
@@ -220,6 +220,6 @@ if __name__ == "__main__":
 
 	db = MySQLdb.connect(host=database_host, user=database_user, passwd=database_pass, db=database_name)
 
-	filenames = find_files('data')
+	filenames = find_files('data/moria1')
 	for f in filenames:
 		parse_file(f)

@@ -24,7 +24,7 @@ def plot_test_data():
 	plt.legend(loc='center left')
 	plt.savefig('data-test.png')
 
-def plot_data():
+def plot_data(filename):
 	x = []
 	maatuska_all = []
 	maatuska_hundred = []	
@@ -85,18 +85,18 @@ def plot_data():
 	plt.figure(figsize=(16,12))
 	plt.plot(x, maatuska_all, label='comp to maatuska2 all')
 	plt.plot(x, maatuska_hundred, label='comp to maatuska2 >100')
-	plt.plot(x, maatuska_longclaw_all, label='comp to longclaw all')
-	plt.plot(x, maatuska_longclaw_hundred, label='comp to longclaw >100')
-	plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
-	plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
+	#plt.plot(x, maatuska_longclaw_all, label='comp to longclaw all')
+	#plt.plot(x, maatuska_longclaw_hundred, label='comp to longclaw >100')
+	#plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
+	#plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
 	plt.plot(x, maatuska_moria_all, label='comp to moria all')
 	plt.plot(x, maatuska_moria_hundred, label='comp to moria >100')
 	plt.legend(loc='center left')
 
 
-	plt.savefig('data.png')
+	plt.savefig(filename)
 
 if __name__ == "__main__":
 	#plot_number_of_datapoints_per_line()
 	plot_test_data()
-	plot_data()
+	plot_data("moria.png")
