@@ -28,6 +28,20 @@ bwauths = {
 		'type' : 'archived',
 		'dl_location' : 'data/maatuska-vanilla',
 		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		# We only support one currently active 'variant' from a source, so we will mark the 'before-date'
+		# and if today > before-date this variant cannot be active and we continue to look
+		# Additionally, we only place a 'before-date' value when we have rotated, so this can be human readable
+		# and in the script we just check for its presence
+		'before-date' : 'Thu, 26 Oct 2017 16:20:23 -0500',
+		'file_minute' : '45',
+		'tz' : 'Canada/Central',
+		'give_up_after' : 10
+		},
+	'maatuska2-nodns' : {
+		'type' : 'archived',
+		'dl_location' : 'data/maatuska-nodns',
+		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'not-before' : datetime(year=2017, month=10, day=26, hour=17, tzinfo=pytz.timezone('Canada/Central')),
 		'file_minute' : '45',
 		'tz' : 'Canada/Central',
 		'give_up_after' : 10
@@ -124,6 +138,9 @@ def download_archived(name, bwauth):
 			pass
 			#print "Skipping", this_name
 		this_time -= timedelta(hours=1)
+		if 'not-before' in bwauth and bwauth['not-before'] > this_time:
+			print "We reached the not-before time, stopping"
+			break
 
 def download_hourly(name, bwauth):
 	filenames = find_files(bwauth['dl_location'])
@@ -186,8 +203,11 @@ def download(name, bwauth):
 
 def download_all():
 	for k in bwauths:
-		print "Downloading", k
-		download(k, bwauths[k])
+		if 'before-date' in bwauths[k]:
+			print "Skipping", k, "because we only download data from it before", bwauths[k]['before-date']
+		else:
+			print "Downloading", k
+			download(k, bwauths[k])
 
 
 if __name__ == "__main__":
