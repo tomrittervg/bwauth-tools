@@ -38,14 +38,18 @@ and r2.bw > 100
 group by r1.timestamp
 
 
+
 -- Calculate the percent difference between all bwauth votes
 SELECT 
 	ts.timestamp,
-	three_five_all.percent_difference as maatuska_all,
-	three_five_hundred.percent_difference  as maatuska_hundred,
+	three_five_all.percent_difference as maatuska_vanilla_all,
+	three_five_hundred.percent_difference  as maatuska_vanilla_hundred,
 	
-	three_one_all.percent_difference as maatuska_longclaw_all,
-	three_one_hundred.percent_difference as maatuska_longclaw_hundred,
+	three_six_all.percent_difference as maatuska_nodns_all,
+	three_six_hundred.percent_difference  as maatuska_nodns_hundred,
+	
+	three_one_all.percent_difference as maatuska_bastet_all,
+	three_one_hundred.percent_difference as maatuska_bastet_hundred,
 
 	three_two_all.percent_difference as maatuska_faravahar_all,
 	three_two_hundred.percent_difference as maatuska_faravahar_hundred,
@@ -86,6 +90,38 @@ and r2.bw > 100
 group by r1.timestamp
 ) as three_five_hundred
 on ts.timestamp = three_five_hundred.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 6
+group by r1.timestamp
+) as three_six_all
+on ts.timestamp = three_six_all.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 6
+and r1.bw > 100
+and r2.bw > 100
+group by r1.timestamp
+) as three_six_hundred
+on ts.timestamp = three_six_hundred.timestamp
 
 left outer join
 (
@@ -183,7 +219,7 @@ group by r1.timestamp
 ) as three_four_hundred
 on ts.timestamp = three_four_hundred.timestamp
 
-INTO OUTFILE '/var/lib/mysql-files/query.csv'
+INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2017-11-05.04.csv'
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n';

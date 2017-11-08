@@ -220,6 +220,6 @@ if __name__ == "__main__":
 
 	db = MySQLdb.connect(host=database_host, user=database_user, passwd=database_pass, db=database_name)
 
-	filenames = find_files('data/moria1')
+	filenames = find_files('data/')
 	for f in filenames:
 		parse_file(f)

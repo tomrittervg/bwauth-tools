@@ -41,16 +41,26 @@ bwauths = {
 		'type' : 'archived',
 		'dl_location' : 'data/maatuska-nodns',
 		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'before-date' : 'Thu, 7 Nov 2017 23:46:00 -0500',
 		'not-before' : datetime(year=2017, month=10, day=26, hour=17, tzinfo=pytz.timezone('Canada/Central')),
 		'file_minute' : '45',
 		'tz' : 'Canada/Central',
 		'give_up_after' : 10
 		},
-	'longclaw' : {
+	'maatuska2-nofasthop' : {
+		'type' : 'archived',
+		'dl_location' : 'data/maatuska-nofasthop',
+		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'not-before' : datetime(year=2017, month=11, day=7, hour=23, tzinfo=pytz.timezone('Canada/Central')),
+		'file_minute' : '45',
+		'tz' : 'Canada/Central',
+		'give_up_after' : 10
+		},
+	'bastet' : {
 		'type' : 'vote',
-		'dl_location' : 'data/longclaw',
+		'dl_location' : 'data/bastet',
 		'url' : 'https://collector.torproject.org/recent/relay-descriptors/votes/',
-		'fingerprint' : '23D15D965BC35114467363C165C4F724B64B4F66',
+		'fingerprint' : '27102BC123E7AF1D4741AE047E160C91ADC76B21',
 		'file_minute' : '00',
 		'tz' : 'UTC',
 		'give_up_after' : 5
