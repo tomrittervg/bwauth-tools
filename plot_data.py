@@ -129,20 +129,19 @@ def plot_data(datafiles, filename, dohundred=False):
 				maatuska_moria_hundred.append(None)
 
 	# Trim the data
-	series = [maatuska_vanilla_all, maatuska_nodns_all, maatuska_bastet_all, maatuska_faravahar_all, maatuska_moria_all]
-	series = [maatuska_vanilla_all, maatuska_nodns_all]
+	series = [maatuska_vanilla_all]#, maatuska_nodns_all, maatuska_bastet_all, maatuska_faravahar_all, maatuska_moria_all]
 	index_of_min = index_of_nth_min(series, 0)
 	index_of_max = index_of_nth_max(series, 0)
 
 	x = x[index_of_min : index_of_max+1]
 	maatuska_vanilla_all = maatuska_vanilla_all[index_of_min : index_of_max+1]
-	maatuska_nodns_all = maatuska_nodns_all[index_of_min : index_of_max+1]
+	#maatuska_nodns_all = maatuska_nodns_all[index_of_min : index_of_max+1]
 	#maatuska_bastet_all = maatuska_bastet_all[index_of_min : index_of_max+1]
 	#maatuska_faravahar_all = maatuska_faravahar_all[index_of_min : index_of_max+1]
 	#maatuska_moria_all = maatuska_moria_all[index_of_min : index_of_max+1]
 	if dohundred:
 		maatuska_vanilla_hundred = maatuska_vanilla_hundred[index_of_min : index_of_max+1]
-		maatuska_nodns_hundred = maatuska_nodns_hundred[index_of_min : index_of_max+1]
+		#maatuska_nodns_hundred = maatuska_nodns_hundred[index_of_min : index_of_max+1]
 		#maatuska_bastet_hundred = maatuska_bastet_hundred[index_of_min : index_of_max+1]
 		#maatuska_faravahar_hundred = maatuska_faravahar_hundred[index_of_min : index_of_max+1]
 		#maatuska_moria_hundred = maatuska_moria_hundred[index_of_min : index_of_max+1]
@@ -153,7 +152,7 @@ def plot_data(datafiles, filename, dohundred=False):
 	plt.xlabel("Consensus Time")
 	plt.ylabel("% Difference")
 	
-	plt.ylim(20, 50)
+	plt.ylim(20, 70)
 	
 	x_axis_formatter = md.DateFormatter('%Y-%m-%d %H:%M')
 	axes=plt.gca()
@@ -164,14 +163,14 @@ def plot_data(datafiles, filename, dohundred=False):
 	x=md.date2num(x)
 
 	plt.plot(x, maatuska_vanilla_all, label='comp to maatuska-vanilla all')
-	plt.plot(x, maatuska_nodns_all, label='comp to maatuska-nodns all')
+	#plt.plot(x, maatuska_nodns_all, label='comp to maatuska-nodns all')
 	#plt.plot(x, maatuska_bastet_all, label='comp to bastet all')
 	#plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
 	#plt.plot(x, maatuska_moria_all, label='comp to moria all')
 	
 	if dohundred:
 		plt.plot(x, maatuska_vanilla_hundred, label='comp to maatuska-vanilla >100')
-		plt.plot(x, maatuska_nodns_hundred, label='comp to maatuska-nodns >100')
+		#plt.plot(x, maatuska_nodns_hundred, label='comp to maatuska-nodns >100')
 		#plt.plot(x, maatuska_bastet_hundred, label='comp to bastet >100')
 		#plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
 		#plt.plot(x, maatuska_moria_hundred, label='comp to moria >100')
