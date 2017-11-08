@@ -28,7 +28,7 @@ class bwauth_relay_data:
 	timestamp = None
 	fingerprint = None
 	bw = None
-	measured_bw = None
+	reported_bw = None
 	measured_at = None
 	updated_at = None
 	scanner = None
@@ -52,9 +52,10 @@ class bwauth_relay_data:
 		self.line_type = TYPE_DIRAUTH_VOTE
 		self.fingerprint = data['fingerprint']
 		self.fingerprint_print = binascii.hexlify(data['fingerprint'])
-		self.bw = int(data['bw'])
-		if 'measured' in data:
-			self.measured_bw = int(data['measured'])
+		if 'bw' in data:
+			self.bw = int(data['bw'])
+		if 'reported_bw' in data:
+			self.reported_bw = int(data['reported_bw'])
 
 	def __init__(self, line_type, bwauth, timestamp, data):
 		self.bwauth_name = bwauth[0]
@@ -71,7 +72,7 @@ class bwauth_relay_data:
 		if self.line_type == TYPE_BWAUTH_VOTE:
 			fields = (self.fingerprint, self.bw, self.measured_at, self.updated_at, self.scanner)
 		elif self.line_type == TYPE_DIRAUTH_VOTE:
-			fields = (self.fingerprint, self.bw)
+			fields = (self.fingerprint, self.reported_bw)
 		else:
 			raise Exception("Do not know how to parse this line type") 
 		return 0 == len(filter(lambda a : a is None, fields))
@@ -82,15 +83,15 @@ class bwauth_relay_data:
 		if self.line_type == TYPE_BWAUTH_VOTE:
 			cols = "timestamp, fingerprint, bwauth, bw, measured_at, updated_at, scanner"
 			vals = "%s, _binary %s, %s, %s, %s, %s, %s"
-			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.measured_at, self.updated_at, self.scanner)
+			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.measured_at, self.updated_at, self.scanner, self.bw)
 		elif self.line_type == TYPE_DIRAUTH_VOTE:
-			cols = "timestamp, fingerprint, bwauth, bw, measured_bw"
+			cols = "timestamp, fingerprint, bwauth, bw, reported_bw"
 			vals = "%s, _binary %s, %s, %s, %s"
-			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.measured_bw)
+			data = (self.timestamp, self.fingerprint, self.bwauth_id, self.bw, self.reported_bw, self.bw)
 		else:
 			raise Exception("Error saving unknown type") 
 
-		c.execute("INSERT INTO relays("+cols+") VALUES("+vals+")", data)
+		c.execute("INSERT INTO relays("+cols+") VALUES("+vals+") ON DUPLICATE KEY UPDATE bw = %s", data)
 
 	def __str__(self):
 		s = self.bwauth_name + "(" + str(self.bwauth_id) + " " + str(self.timestamp) + ") " + self.fingerprint_print + " : " + str(self.bw)
@@ -168,9 +169,11 @@ def parse_file_dirauth_vote(filename):
 			mode = MODE_BANDWIDTH
 		elif mode == MODE_BANDWIDTH and l.startswith('w '):
 			parts = l.split(' ')
-			data['bw'] = int(parts[1].split('=')[1])
+			data['reported_bw'] = int(parts[1].split('=')[1])
+			
+			# Measured Bandwidth
 			if len(parts) > 2:
-				data['measured'] = int(parts[2].split('=')[1])
+				data['bw'] = int(parts[2].split('=')[1])
 			mode = MODE_PROCESS
 		elif mode == MODE_BANDWIDTH and l.startswith('r '):
 			raise Exception("Error, found a new relay line while I was looking for a bandwidth line for " + nickname)
