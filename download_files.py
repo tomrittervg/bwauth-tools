@@ -51,7 +51,17 @@ bwauths = {
 		'type' : 'archived',
 		'dl_location' : 'data/maatuska-nofasthop',
 		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'before-date' : 'Thu, 8 Nov 2017 22:11:00 -0500',
 		'not-before' : datetime(year=2017, month=11, day=7, hour=23, tzinfo=pytz.timezone('Canada/Central')),
+		'file_minute' : '45',
+		'tz' : 'Canada/Central',
+		'give_up_after' : 10
+		},
+	'maatuska2-21697' : {
+		'type' : 'archived',
+		'dl_location' : 'data/maatuska-21697',
+		'url':  'https://bwauth.ritter.vg/bwauth-patches/',
+		'not-before' : datetime(year=2017, month=11, day=8, hour=22, tzinfo=pytz.timezone('Canada/Central')),
 		'file_minute' : '45',
 		'tz' : 'Canada/Central',
 		'give_up_after' : 10

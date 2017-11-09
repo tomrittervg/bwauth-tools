@@ -21,3 +21,26 @@ I ran two bwauths, that had no differences between them, and calculated the aver
 Then I changed one bwauth to connect to the final destination using an IP address and left the other one connecting using a DNS name. That data is the the orange and red lines.
 
 I don't see much of a difference. So it seems that bwauth measurements were not affected by this issue.
+
+## Fast Relays vs All Relays
+
+I had a theory: fast relays speed is more stable, while slow relays (really relays in the bottom bucket of slowness) have more volatile speeds. One bwauth measures them at 25, another bwauth measured them at 50 - a 100% difference. So I queried twice, once for all relays, and once for relays whose speed (in both consensuses) was > 100.
+
+Here I compare maatuska's bwauth to each other bwauth:
+
+Comparison to maatuska's alternate bwauth:
+![Comparison to maatuska's alternate bwauth](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-maatuska-01.png)
+
+Comparison to moria:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-moria-01.png)
+
+Comparison to faravahar:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-faravahar-01.png)
+
+Comparison to bastet:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-bastet-01.png)
+
+What is up with bastet! This one requires more investigation!
+
+
+But in general, there is not much difference between the top relays and the bottom relays. Aside from whatever happened to bastet!
