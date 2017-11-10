@@ -44,3 +44,32 @@ What is up with bastet! This one requires more investigation!
 
 
 But in general, there is not much difference between the top relays and the bottom relays. Aside from whatever happened to bastet!
+
+## Scanner Loop Times and DNS 
+
+When we were looking at [https://trac.torproject.org/projects/tor/ticket/21394 the DNS timeout issue], Sebastian had the question if the IP-based scanners completed faster. I publish the scanner loop times for the purposes of detecting a stuck scanner, so I could measure the time between a DNS-based bwauth and an IP-address based bwauth.
+
+The graphs are below. In order to make them quickly I don't have the X axis labeled very nicely, but here's what it means:
+
+* 1 means the DNS-based Scanner
+* 1.5 is the *average* of the DNS-based Scanner
+* 2 means the IP-based Scanner
+* 2.5 is the *average* of the IP-based Scanner
+
+![Scanner 1](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-1.png)
+
+![Scanner 2](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-2.png)
+
+![Scanner 3](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-3.png)
+
+![Scanner 4](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-4.png)
+
+![Scanner 5](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-5.png)
+
+![Scanner 6](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-6.png)
+
+![Scanner 7](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-7.png)
+
+![Scanner 8](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-8.png)
+
+![Scanner 9](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-9.png)
