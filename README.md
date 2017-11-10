@@ -1,49 +1,11 @@
 # bwauth Analyses
 
-Archived here for posterity
+Archived here for posterity. The most recent addition is at the top.
 
-## Apples to Apples comparison
-
-I was wondering how much bwauths disgaree on measurements. That seemed interesting. But first a simpler question arose: how much does a bwauth disagree with *itself*? So I ran two identical bwauths from the same box at the same time, and compared their results.
-
-![Two identical bwauths](https://tomrittervg.github.io/bwauth-tools/analyses/straight-comparison-01.png)
-
-The >100 graph restricts the calculations only to relays whose bw value (measured by both bwauths) is at least 100. It turns out there is quite a bit of difference!
-
-## DNS Measurements
-
-As part of the investigation of [https://trac.torproject.org/projects/tor/ticket/21394 the DNS timeout issue], bwauths were asked to make sure they were conducting measurements using a DNS name as the download location and not an IP address. The thinking was if an exit has DNS timeouts, its measured bandwidth rating should go down. My bwauth was already using a DNS name, but I switched the alternate bwauth to use an IP address to compare.
-
-![DNS vs IP address comparison](https://tomrittervg.github.io/bwauth-tools/analyses/dns-comparison-01.png)
-
-I ran two bwauths, that had no differences between them, and calculated the average difference between two sets of relays for each consensus: the set of all relays, and the set of relays where the bw measurement was above 100 in both bwauths. That data (the blue and green lines) are the control.
-
-Then I changed one bwauth to connect to the final destination using an IP address and left the other one connecting using a DNS name. That data is the the orange and red lines.
-
-I don't see much of a difference. So it seems that bwauth measurements were not affected by this issue.
-
-## Fast Relays vs All Relays
-
-I had a theory: fast relays speed is more stable, while slow relays (really relays in the bottom bucket of slowness) have more volatile speeds. One bwauth measures them at 25, another bwauth measured them at 50 - a 100% difference. So I queried twice, once for all relays, and once for relays whose speed (in both consensuses) was > 100.
-
-Here I compare maatuska's bwauth to each other bwauth:
-
-Comparison to maatuska's alternate bwauth:
-![Comparison to maatuska's alternate bwauth](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-maatuska-01.png)
-
-Comparison to moria:
-![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-moria-01.png)
-
-Comparison to faravahar:
-![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-faravahar-01.png)
-
-Comparison to bastet:
-![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-bastet-01.png)
-
-What is up with bastet! This one requires more investigation!
-
-
-But in general, there is not much difference between the top relays and the bottom relays. Aside from whatever happened to bastet!
+* [#scanner-loop-times-and-dns Scanner Loop Times and DNS]
+* [#fast-relays-vs-all-relays Fast Relays vs All Relays]
+* [#dns-measurements DNS Measurements]
+* [#apples-to-apples-comparison Apples to Apples Comparison]
 
 ## Scanner Loop Times and DNS 
 
@@ -73,3 +35,48 @@ The graphs are below. In order to make them quickly I don't have the X axis labe
 ![Scanner 8](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-8.png)
 
 ![Scanner 9](https://tomrittervg.github.io/bwauth-tools/analyses/scanner-9.png)
+
+Based on this data, it seems like Scanner 1 and maybe 2 are impacted by this, but for the rest, they seem like within just random variation.  That makes sense - the fastest relays are the ones that experience DNS timeouts (and hence longer scanner times.)
+
+## Fast Relays vs All Relays
+
+I had a theory: fast relays speed is more stable, while slow relays (really relays in the bottom bucket of slowness) have more volatile speeds. One bwauth measures them at 25, another bwauth measured them at 50 - a 100% difference. So I queried twice, once for all relays, and once for relays whose speed (in both consensuses) was > 100.
+
+Here I compare maatuska's bwauth to each other bwauth:
+
+Comparison to maatuska's alternate bwauth:
+![Comparison to maatuska's alternate bwauth](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-maatuska-01.png)
+
+Comparison to moria:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-moria-01.png)
+
+Comparison to faravahar:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-faravahar-01.png)
+
+Comparison to bastet:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-bastet-01.png)
+
+What is up with bastet! This one requires more investigation!
+
+
+But in general, there is not much difference between the top relays and the bottom relays. Aside from whatever happened to bastet!
+
+## DNS Measurements
+
+As part of the investigation of [https://trac.torproject.org/projects/tor/ticket/21394 the DNS timeout issue], bwauths were asked to make sure they were conducting measurements using a DNS name as the download location and not an IP address. The thinking was if an exit has DNS timeouts, its measured bandwidth rating should go down. My bwauth was already using a DNS name, but I switched the alternate bwauth to use an IP address to compare.
+
+![DNS vs IP address comparison](https://tomrittervg.github.io/bwauth-tools/analyses/dns-comparison-01.png)
+
+I ran two bwauths, that had no differences between them, and calculated the average difference between two sets of relays for each consensus: the set of all relays, and the set of relays where the bw measurement was above 100 in both bwauths. That data (the blue and green lines) are the control.
+
+Then I changed one bwauth to connect to the final destination using an IP address and left the other one connecting using a DNS name. That data is the the orange and red lines.
+
+I don't see much of a difference. So it seems that bwauth measurements were not affected by this issue.
+
+## Apples to Apples comparison
+
+I was wondering how much bwauths disgaree on measurements. That seemed interesting. But first a simpler question arose: how much does a bwauth disagree with *itself*? So I ran two identical bwauths from the same box at the same time, and compared their results.
+
+![Two identical bwauths](https://tomrittervg.github.io/bwauth-tools/analyses/straight-comparison-01.png)
+
+The >100 graph restricts the calculations only to relays whose bw value (measured by both bwauths) is at least 100. It turns out there is quite a bit of difference!
