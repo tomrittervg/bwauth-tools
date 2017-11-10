@@ -2,10 +2,10 @@
 
 Archived here for posterity. The most recent addition is at the top.
 
-* [#scanner-loop-times-and-dns Scanner Loop Times and DNS]
-* [#fast-relays-vs-all-relays Fast Relays vs All Relays]
-* [#dns-measurements DNS Measurements]
-* [#apples-to-apples-comparison Apples to Apples Comparison]
+* <a href="#scanner-loop-times-and-dns">Scanner Loop Times and DNS</a>
+* <a href="#fast-relays-vs-all-relays">Fast Relays vs All Relays</a>
+* <a href="#dns-measurements">DNS Measurements</a>
+* <a href="#apples-to-apples-comparison">Apples to Apples Comparison</a>
 
 ## Scanner Loop Times and DNS 
 
