@@ -48,6 +48,9 @@ SELECT
 	three_six_all.percent_difference as maatuska_nodns_all,
 	three_six_hundred.percent_difference  as maatuska_nodns_hundred,
 	
+	three_eight_all.percent_difference as maatuska_21697_all,
+	three_eight_hundred.percent_difference  as maatuska_21697_hundred,
+	
 	three_one_all.percent_difference as maatuska_bastet_all,
 	three_one_hundred.percent_difference as maatuska_bastet_hundred,
 
@@ -55,7 +58,10 @@ SELECT
 	three_two_hundred.percent_difference as maatuska_faravahar_hundred,
 
 	three_four_all.percent_difference as maatuska_moria_all,
-	three_four_hundred.percent_difference as maatuska_moria_hundred
+	three_four_hundred.percent_difference as maatuska_moria_hundred,
+
+	three_nine_all.percent_difference as maatuska_gabelmoo_all,
+	three_nine_hundred.percent_difference as maatuska_gabelmoo_hundred
 FROM
 relays as ts
 
@@ -122,6 +128,38 @@ and r2.bw > 100
 group by r1.timestamp
 ) as three_six_hundred
 on ts.timestamp = three_six_hundred.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 8
+group by r1.timestamp
+) as three_eight_all
+on ts.timestamp = three_eight_all.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 8
+and r1.bw > 100
+and r2.bw > 100
+group by r1.timestamp
+) as three_eight_hundred
+on ts.timestamp = three_eight_hundred.timestamp
 
 left outer join
 (
@@ -218,6 +256,38 @@ and r2.bw > 100
 group by r1.timestamp
 ) as three_four_hundred
 on ts.timestamp = three_four_hundred.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 9
+group by r1.timestamp
+) as three_nine_all
+on ts.timestamp = three_nine_all.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 9
+and r1.bw > 100
+and r2.bw > 100
+group by r1.timestamp
+) as three_nine_hundred
+on ts.timestamp = three_nine_hundred.timestamp
 
 INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2017-11-05.04.csv'
 FIELDS TERMINATED BY ','

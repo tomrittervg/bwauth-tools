@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import re
 import sys
 import json
 import pytz
@@ -70,7 +71,7 @@ class bwauth_relay_data:
 
 	def valid(self):
 		if self.line_type == TYPE_BWAUTH_VOTE:
-			fields = (self.fingerprint, self.bw, self.measured_at, self.updated_at, self.scanner)
+			fields = (self.fingerprint, self.bw, self.measured_at, self.updated_at)
 		elif self.line_type == TYPE_DIRAUTH_VOTE:
 			fields = (self.fingerprint, self.reported_bw)
 		else:
@@ -205,10 +206,10 @@ def parse_file(filename):
 		return
 	print "Processing ", filename
 
-	if 'moria' in filename or 'bwscan.' in filename:
-		parse_file_raw_bwauth_vote(filename)
-	elif '-vote-' in filename:
+	if '-vote-' in filename:
 		parse_file_dirauth_vote(filename)
+	elif 'bwscan.' in filename or re.search("201[0-9]-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}$", filename):
+		parse_file_raw_bwauth_vote(filename)	
 	else:
 		raise Exception("Don't know how to parse " + filename)
 	record_file(filename)

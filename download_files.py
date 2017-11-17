@@ -7,6 +7,7 @@ import pytz
 import requests
 from datetime import datetime, timedelta
 
+from database_creds import *
 
 bwauths = {
 	'moria1' : {
@@ -67,22 +68,26 @@ bwauths = {
 		'give_up_after' : 10
 		},
 	'bastet' : {
-		'type' : 'vote',
+		'type' : 'hourly',
 		'dl_location' : 'data/bastet',
-		'url' : 'https://collector.torproject.org/recent/relay-descriptors/votes/',
-		'fingerprint' : '27102BC123E7AF1D4741AE047E160C91ADC76B21',
+		'url' : 'https://bandepassante.readthefinemanual.net/bwscan.V3BandwidthsFile',
 		'file_minute' : '00',
 		'tz' : 'UTC',
-		'give_up_after' : 5
+		},
+	'gabelmoo' : {
+		'type' : 'hourly',
+		'dl_location' : 'data/gabelmoo',
+		'url' : 'https://angmar.informatik.uni-erlangen.de/bwscan.V3BandwidthsFile',
+		'file_minute' : '00',
+		'tz' : 'UTC',
 		},
 	'faravahar' : {
-		'type' : 'vote',
+		'type' : 'hourly',
 		'dl_location' : 'data/faravahar',
-		'url' : 'https://collector.torproject.org/recent/relay-descriptors/votes/',
+		'url' : faravahar_url,
 		'fingerprint' : 'EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97',
 		'file_minute' : '00',
 		'tz' : 'UTC',
-		'give_up_after' : 5
 		},
 }
 
@@ -123,7 +128,11 @@ def filetime_to_filename(bwauth, dt):
 
 def wget(url, destination):
 	try:
-		r = requests.get(url, stream=True)
+		pdict = None
+		if ".onion" in url:
+			pdict=dict(http='socks5h://127.0.0.1:8080', https='socks5h://127.0.0.1:8080')
+
+		r = requests.get(url, stream=True, proxies=pdict)
 		if r.status_code == 404:
 			return False
 		h = open(destination, "wb")

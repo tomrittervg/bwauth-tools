@@ -2,3 +2,5 @@ database_host = "localhost"
 database_user = "username"
 database_pass = "password"
 database_name = "database"
+
+faravahar_url = "secret.onion"
