@@ -289,7 +289,7 @@ group by r1.timestamp
 ) as three_nine_hundred
 on ts.timestamp = three_nine_hundred.timestamp
 
-INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2017-11-05.04.csv'
+INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2017-11-20.01.csv'
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n';

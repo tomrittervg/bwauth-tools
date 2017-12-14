@@ -128,29 +128,29 @@ def plot_data(datafiles, filename, dohundred=False):
 
 		if dohundred:
 			if p[10] != "\\N":
-				maatuska_faravahar_hundred.append(float(p[11]))
+				maatuska_faravahar_hundred.append(float(p[10]))
 			else:
 				maatuska_faravahar_hundred.append(None)
 
-		if p[12] != "\\N":
-			maatuska_moria_all.append(float(p[12]))
+		if p[11] != "\\N":
+			maatuska_moria_all.append(float(p[11]))
 		else:
 			maatuska_moria_all.append(None)
 
 		if dohundred:
-			if p[13] != "\\N":
-				maatuska_moria_hundred.append(float(p[13]))
+			if p[12] != "\\N":
+				maatuska_moria_hundred.append(float(p[12]))
 			else:
 				maatuska_moria_hundred.append(None)
 
-		if p[14] != "\\N":
-			maatuska_gabelmoo_all.append(float(p[14]))
+		if p[13] != "\\N":
+			maatuska_gabelmoo_all.append(float(p[13]))
 		else:
 			maatuska_gabelmoo_all.append(None)
 
 		if dohundred:
-			if p[15] != "\\N":
-				maatuska_gabelmoo_hundred.append(float(p[15]))
+			if p[14] != "\\N":
+				maatuska_gabelmoo_hundred.append(float(p[14]))
 			else:
 				maatuska_gabelmoo_hundred.append(None)
 
@@ -164,18 +164,18 @@ def plot_data(datafiles, filename, dohundred=False):
 	maatuska_vanilla_all = maatuska_vanilla_all[index_of_min : index_of_max+1]
 	maatuska_nodns_all = maatuska_nodns_all[index_of_min : index_of_max+1]
 	maatuska_21697_all = maatuska_21697_all[index_of_min : index_of_max+1]
-	maatuska_bastet_all = maatuska_bastet_all[index_of_min : index_of_max+1]
-	maatuska_faravahar_all = maatuska_faravahar_all[index_of_min : index_of_max+1]
-	maatuska_moria_all = maatuska_moria_all[index_of_min : index_of_max+1]
-	maatuska_gabelmoo_all = maatuska_gabelmoo_all[index_of_min : index_of_max+1]
+	#maatuska_bastet_all = maatuska_bastet_all[index_of_min : index_of_max+1]
+	#maatuska_faravahar_all = maatuska_faravahar_all[index_of_min : index_of_max+1]
+	#maatuska_moria_all = maatuska_moria_all[index_of_min : index_of_max+1]
+	#maatuska_gabelmoo_all = maatuska_gabelmoo_all[index_of_min : index_of_max+1]
 	if dohundred:
 		maatuska_vanilla_hundred = maatuska_vanilla_hundred[index_of_min : index_of_max+1]
 		maatuska_nodns_hundred = maatuska_nodns_hundred[index_of_min : index_of_max+1]
 		maatuska_21697_hundred = maatuska_21697_hundred[index_of_min : index_of_max+1]
-		maatuska_bastet_hundred = maatuska_bastet_hundred[index_of_min : index_of_max+1]
-		maatuska_faravahar_hundred = maatuska_faravahar_hundred[index_of_min : index_of_max+1]
-		maatuska_moria_hundred = maatuska_moria_hundred[index_of_min : index_of_max+1]
-		maatuska_gabelmoo_hundred = maatuska_gabelmoo_hundred[index_of_min : index_of_max+1]
+		#maatuska_bastet_hundred = maatuska_bastet_hundred[index_of_min : index_of_max+1]
+		#maatuska_faravahar_hundred = maatuska_faravahar_hundred[index_of_min : index_of_max+1]
+		#maatuska_moria_hundred = maatuska_moria_hundred[index_of_min : index_of_max+1]
+		#maatuska_gabelmoo_hundred = maatuska_gabelmoo_hundred[index_of_min : index_of_max+1]
 
 
 	# Plot
@@ -199,14 +199,14 @@ def plot_data(datafiles, filename, dohundred=False):
 	if dohundred: plt.plot(x, maatuska_nodns_hundred, label='comp to maatuska-nodns >100')
 	plt.plot(x, maatuska_21697_all, label='comp to maatuska-21697 all')
 	if dohundred: plt.plot(x, maatuska_21697_hundred, label='comp to maatuska-21697 >100')
-	#plt.plot(x, maatuska_bastet_all, label='comp to bastet all')
-	#if dohundred: plt.plot(x, maatuska_bastet_hundred, label='comp to bastet >100')
-	#plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
-	#if dohundred: plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
-	#plt.plot(x, maatuska_moria_all, label='comp to moria all')
-	#if dohundred: plt.plot(x, maatuska_moria_hundred, label='comp to moria >100')
-	#plt.plot(x, maatuska_gabelmoo_all, label='comp to gabelmoo all')
-	#if dohundred: plt.plot(x, maatuska_gabelmoo_hundred, label='comp to gabelmoo >100')
+	plt.plot(x, maatuska_bastet_all, label='comp to bastet all')
+	if dohundred: plt.plot(x, maatuska_bastet_hundred, label='comp to bastet >100')
+	plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
+	if dohundred: plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
+	plt.plot(x, maatuska_moria_all, label='comp to moria all')
+	if dohundred: plt.plot(x, maatuska_moria_hundred, label='comp to moria >100')
+	plt.plot(x, maatuska_gabelmoo_all, label='comp to gabelmoo all')
+	if dohundred: plt.plot(x, maatuska_gabelmoo_hundred, label='comp to gabelmoo >100')
 	
 	plt.legend(loc='upper left')
 	
@@ -222,4 +222,6 @@ if __name__ == "__main__":
 
 	#plot_number_of_datapoints_per_line()
 	#plot_test_data(args.output_file)
-	plot_data(args.input_files, args.output_file, False)
+	plot_data(args.input_files, args.output_file, True)
+
+
