@@ -51,6 +51,9 @@ SELECT
 	three_eight_all.percent_difference as maatuska_21697_all,
 	three_eight_hundred.percent_difference  as maatuska_21697_hundred,
 	
+	three_ten_all.percent_difference as maatuska_fastly_all,
+	three_ten_hundred.percent_difference  as maatuska_fastly_hundred,
+	
 	three_one_all.percent_difference as maatuska_bastet_all,
 	three_one_hundred.percent_difference as maatuska_bastet_hundred,
 
@@ -289,7 +292,39 @@ group by r1.timestamp
 ) as three_nine_hundred
 on ts.timestamp = three_nine_hundred.timestamp
 
-INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2017-11-20.01.csv'
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 10
+group by r1.timestamp
+) as three_ten_all
+on ts.timestamp = three_ten_all.timestamp
+
+left outer join
+(
+SELECT 
+	r1.timestamp, 
+	AVG((abs(r1.bw - r2.bw) / ((r1.bw + r2.bw) / 2)) * 100) as percent_difference
+FROM `relays` as r1
+inner join relays as r2
+on r1.timestamp = r2.timestamp
+and r1.fingerprint = r2.fingerprint
+and r1.bwauth = 3
+and r2.bwauth = 10
+and r1.bw > 100
+and r2.bw > 100
+group by r1.timestamp
+) as three_ten_hundred
+on ts.timestamp = three_ten_hundred.timestamp
+
+INTO OUTFILE '/var/lib/mysql-files/bwauth-diffs-2018-01-12.01.csv'
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n';
