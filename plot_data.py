@@ -53,22 +53,12 @@ def plot_test_data(filename):
 	plt.legend(loc='center left')
 	plt.savefig(filename)
 
-def plot_data(datafiles, filename, dohundred=False):
+def plot_data(datafiles, filename, plot):
+	global indexes
 	x = []
-	maatuska_vanilla_all = []
-	maatuska_vanilla_hundred = []
-	maatuska_nodns_all = []
-	maatuska_nodns_hundred = []
-	maatuska_21697_all = []
-	maatuska_21697_hundred = []
-	maatuska_bastet_all = []
-	maatuska_bastet_hundred = []
-	maatuska_faravahar_all = []
-	maatuska_faravahar_hundred = []
-	maatuska_moria_all = []
-	maatuska_moria_hundred = []
-	maatuska_gabelmoo_all = []
-	maatuska_gabelmoo_hundred = []
+	data = {}
+	for i in indexes:
+		data[i] = []
 
 	# Read the data
 	for l in datafiles[0]:
@@ -77,136 +67,40 @@ def plot_data(datafiles, filename, dohundred=False):
 		x.append(datetime.fromtimestamp(int(p[0])))
 		#x.append(int(p[0]))
 
-		if p[1] != "\\N":
-			maatuska_vanilla_all.append(float(p[1]))
-		else:
-			maatuska_vanilla_all.append(None)
-
-		if dohundred:
-			if p[2] != "\\N":
-				maatuska_vanilla_hundred.append(float(p[2]))
+		for s in plot:
+			if p[indexes[s]] != "\\N":
+				data[s].append(float(p[indexes[s]]))
 			else:
-				maatuska_vanilla_hundred.append(None)
+				data[s].append(None)
 
-		if p[3] != "\\N":
-			maatuska_nodns_all.append(float(p[3]))
-		else:
-			maatuska_nodns_all.append(None)
-
-		if dohundred:
-			if p[4] != "\\N":
-				maatuska_nodns_hundred.append(float(p[4]))
-			else:
-				maatuska_nodns_hundred.append(None)
-
-		if p[5] != "\\N":
-			maatuska_21697_all.append(float(p[5]))
-		else:
-			maatuska_21697_all.append(None)
-
-		if dohundred:
-			if p[6] != "\\N":
-				maatuska_21697_hundred.append(float(p[6]))
-			else:
-				maatuska_21697_hundred.append(None)
-
-		if p[7] != "\\N":
-			maatuska_bastet_all.append(float(p[7]))
-		else:
-			maatuska_bastet_all.append(None)
-
-		if dohundred:
-			if p[8] != "\\N":
-				maatuska_bastet_hundred.append(float(p[8]))
-			else:
-				maatuska_bastet_hundred.append(None)
-
-		if p[9] != "\\N":
-			maatuska_faravahar_all.append(float(p[9]))
-		else:
-			maatuska_faravahar_all.append(None)
-
-		if dohundred:
-			if p[10] != "\\N":
-				maatuska_faravahar_hundred.append(float(p[10]))
-			else:
-				maatuska_faravahar_hundred.append(None)
-
-		if p[11] != "\\N":
-			maatuska_moria_all.append(float(p[11]))
-		else:
-			maatuska_moria_all.append(None)
-
-		if dohundred:
-			if p[12] != "\\N":
-				maatuska_moria_hundred.append(float(p[12]))
-			else:
-				maatuska_moria_hundred.append(None)
-
-		if p[13] != "\\N":
-			maatuska_gabelmoo_all.append(float(p[13]))
-		else:
-			maatuska_gabelmoo_all.append(None)
-
-		if dohundred:
-			if p[14] != "\\N":
-				maatuska_gabelmoo_hundred.append(float(p[14]))
-			else:
-				maatuska_gabelmoo_hundred.append(None)
 
 	# Trim the data
-	series = [maatuska_vanilla_all, maatuska_nodns_all, maatuska_bastet_all, maatuska_faravahar_all, maatuska_moria_all]
-	#series = [maatuska_bastet_all]
+	series = []
+	for s in plot:
+		series.append(data[s])
 	index_of_min = index_of_nth_min(series, 0)
 	index_of_max = index_of_nth_max(series, 0)
-
 	x = x[index_of_min : index_of_max+1]
-	maatuska_vanilla_all = maatuska_vanilla_all[index_of_min : index_of_max+1]
-	maatuska_nodns_all = maatuska_nodns_all[index_of_min : index_of_max+1]
-	maatuska_21697_all = maatuska_21697_all[index_of_min : index_of_max+1]
-	#maatuska_bastet_all = maatuska_bastet_all[index_of_min : index_of_max+1]
-	#maatuska_faravahar_all = maatuska_faravahar_all[index_of_min : index_of_max+1]
-	#maatuska_moria_all = maatuska_moria_all[index_of_min : index_of_max+1]
-	#maatuska_gabelmoo_all = maatuska_gabelmoo_all[index_of_min : index_of_max+1]
-	if dohundred:
-		maatuska_vanilla_hundred = maatuska_vanilla_hundred[index_of_min : index_of_max+1]
-		maatuska_nodns_hundred = maatuska_nodns_hundred[index_of_min : index_of_max+1]
-		maatuska_21697_hundred = maatuska_21697_hundred[index_of_min : index_of_max+1]
-		#maatuska_bastet_hundred = maatuska_bastet_hundred[index_of_min : index_of_max+1]
-		#maatuska_faravahar_hundred = maatuska_faravahar_hundred[index_of_min : index_of_max+1]
-		#maatuska_moria_hundred = maatuska_moria_hundred[index_of_min : index_of_max+1]
-		#maatuska_gabelmoo_hundred = maatuska_gabelmoo_hundred[index_of_min : index_of_max+1]
-
+	for s in plot:
+		data[s] = data[s][index_of_min : index_of_max+1]
 
 	# Plot
 	plt.figure(figsize=(16,12))
 	plt.xlabel("Consensus Time")
 	plt.ylabel("% Difference")
 	
-	plt.ylim(20, 50)
+	plt.ylim(30, 80)
 	
 	x_axis_formatter = md.DateFormatter('%Y-%m-%d %H:%M')
 	axes=plt.gca()
 	axes.xaxis.set_major_formatter(x_axis_formatter)
-	axes.xaxis.set_major_locator(ticker.MultipleLocator(1.6))
+	axes.xaxis.set_major_locator(ticker.MultipleLocator(4))
 	plt.gcf().autofmt_xdate()
 
 	x=md.date2num(x)
 
-	plt.plot(x, maatuska_vanilla_all, label='comp to maatuska-vanilla all')
-	if dohundred: plt.plot(x, maatuska_vanilla_hundred, label='comp to maatuska-vanilla >100')
-	plt.plot(x, maatuska_nodns_all, label='comp to maatuska-nodns all')
-	if dohundred: plt.plot(x, maatuska_nodns_hundred, label='comp to maatuska-nodns >100')
-	plt.plot(x, maatuska_21697_all, label='comp to maatuska-21697 all')
-	if dohundred: plt.plot(x, maatuska_21697_hundred, label='comp to maatuska-21697 >100')
-	plt.plot(x, maatuska_bastet_all, label='comp to bastet all')
-	if dohundred: plt.plot(x, maatuska_bastet_hundred, label='comp to bastet >100')
-	plt.plot(x, maatuska_faravahar_all, label='comp to faravahar all')
-	if dohundred: plt.plot(x, maatuska_faravahar_hundred, label='comp to faravahar >100')
-	plt.plot(x, maatuska_moria_all, label='comp to moria all')
-	if dohundred: plt.plot(x, maatuska_moria_hundred, label='comp to moria >100')
-	plt.plot(x, maatuska_gabelmoo_all, label='comp to gabelmoo all')
-	if dohundred: plt.plot(x, maatuska_gabelmoo_hundred, label='comp to gabelmoo >100')
+	for s in plot:
+		plt.plot(x, data[s], label='comp to ' + s)
 	
 	plt.legend(loc='upper left')
 	
@@ -220,8 +114,30 @@ if __name__ == "__main__":
 		help="Provide the destination filepath for the graph")
 	args = parser.parse_args()
 
+	# This lines up with the order of the columns in the select query
+	indexes = {
+		'maatuska_vanilla_all' : 1,
+		'maatuska_vanilla_hundred' : 2,
+		'maatuska_nodns_all' : 3,
+		'maatuska_nodns_hundred' : 4,
+		'maatuska_21697_all' : 5,
+		'maatuska_21697_hundred' : 6,
+		'maatuska_fastly_all' : 7,
+		'maatuska_fastly_hundred' : 8,
+		'maatuska_bastet_all' : 9,
+		'maatuska_bastet_hundred' : 10,
+		'maatuska_faravahar_all' : 11,
+		'maatuska_faravahar_hundred' : 12,
+		'maatuska_moria_all' : 13,
+		'maatuska_moria_hundred' : 14,
+		'maatuska_gabelmoo_all' : 15,
+		'maatuska_gabelmoo_hundred' : 16,
+	}
+
+	toplot = ['maatuska_gabelmoo_all', 'maatuska_gabelmoo_hundred']
+
 	#plot_number_of_datapoints_per_line()
 	#plot_test_data(args.output_file)
-	plot_data(args.input_files, args.output_file, True)
+	plot_data(args.input_files, args.output_file, toplot)
 
 
