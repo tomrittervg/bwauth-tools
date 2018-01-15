@@ -2,10 +2,41 @@
 
 Archived here for posterity. The most recent addition is at the top.
 
+* <a href="#cdn">Single Server vs CDN</a>
+* <a href="#updated-01">Updated Comparisons</a>
 * <a href="#scanner-loop-times-and-dns">Scanner Loop Times and DNS</a>
 * <a href="#fast-relays-vs-all-relays">Fast Relays vs All Relays</a>
 * <a href="#dns-measurements">DNS Measurements</a>
 * <a href="#apples-to-apples-comparison">Apples to Apples Comparison</a>
+
+## Single Server vs CDN
+
+Over in [this ticket](https://trac.torproject.org/projects/tor/ticket/24506) we were wondering how much of a difference using a CDN makes for the bwauth measurements. We used fastly as the CDN.
+
+Note that this graph only compares the difference using a CDN makes for _this one bwauth_. As shown in [the geographic bwauth bandwidth weighting graph](https://people.torproject.org/~irl/volatile/rsvotes/) (that link may be temporary, but it works right now) - different bwauths generally weight geographic weights differently.
+
+Also, as shown by the graph in section right before this one, it seems like the network as a whole may be getting a little 'more different' recently, so that should be considered. (We may be reaching the limits of how good of conclusions we can draw from "Well we'll just graph it, and see if it looks weird!")
+
+![CDN Comparison](https://tomrittervg.github.io/bwauth-tools/analyses/fastly-01.png)
+
+## Updated Comparisons
+
+As a followup to the earlier per-bwauth comparisons, here are updated graphs.
+
+All bwauths, but not breaking out fast relays:
+![bwauth comparisons, Jan 2018](https://tomrittervg.github.io/bwauth-tools/analyses/all-no-hundred-02.png)
+
+Comparison to moria:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-moria-02.png)
+
+Comparison to bastet:
+![Comparison to moria](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-bastet-02.png)
+
+Comparison to gabelmoo:
+![Comparison to gabelmoo](https://tomrittervg.github.io/bwauth-tools/analyses/hundred-gabelmoo-02.png)
+
+I lost data for faravahar in November unfortunetly, but hope to get it back soon.
+
 
 ## Scanner Loop Times and DNS 
 
